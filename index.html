@@ -253,6 +253,27 @@
       }
     }
 
+    /* Estilo do HR */
+hr {
+  width: 60px;
+  border: none;
+  border-top: 1px solid var(--accent);
+  margin: 15px 0;
+  opacity: 0; /* Começa invisível */
+  animation: fadeInSoft 1.5s ease forwards; /* Anima ao aparecer */
+}
+
+/* Classe para o texto "+HUMANO" */
+.fade-in-text {
+  display: inline-block;
+  opacity: 0;
+  animation: fadeInSoft 2s ease forwards 0.5s; /* Delay de 0.5s para vir após o HR */
+}
+
+@keyframes fadeInSoft {
+  to { opacity: 1; }
+}
+
     /* ===================== MAIN ===================== */
     .container {
       width: 100%;
@@ -531,6 +552,9 @@
       .image-wrap {
         margin: 0;
       }
+      #typing{
+        font-size: 24px;
+      }
     }
   </style>
 </head>
@@ -564,12 +588,18 @@
           <div class="prompt-line"><span>~/</span><span style="color:var(--text)">cat details.txt</span></div>
           <h2 class="typing-text" id="typing2"></h2>
         </div>
+        <div class="block">
+          <div class="prompt-line"><span>~/</span><span style="color:var(--text)">cat leia-me.txt</span></div>
+          <h2 class="typing-text" id="typing3"></h2>
+        </div>
 
         <div class="socials">
           <div class="socials-label">Contato</div>
           <a href="https://t.me/salatbanana" class="social-link" target="_blank"><span class="link-dot"></span>
             t.me/salatbanana</a>
           <a href="#" class="social-link" id="emailCopy"><span class="link-dot"></span> levisalatiel@proton.me</a>
+          <a href="https://www.youtube.com/@salatiellevi" class="social-link"><span
+              class="link-dot"></span>youtube.com/@salatiellevi</a>
         </div>
       </div>
 
@@ -595,16 +625,24 @@
 
   <script>
     /* THEME TOGGLE LOGIC */
-    const themeToggle = document.getElementById('themeToggle');
-    const themeLabel = document.getElementById('themeLabel');
-    const html = document.documentElement;
+   const themeToggle = document.getElementById('themeToggle');
+const themeLabel = document.getElementById('themeLabel');
+const html = document.documentElement;
 
-    themeToggle.addEventListener('click', () => {
-      const isLight = html.getAttribute('data-theme') === 'light';
-      html.setAttribute('data-theme', isLight ? 'dark' : 'light');
-      themeLabel.innerText = isLight ? 'Light Mode' : 'Dark Mode';
-    });
+// Define o texto inicial (Padrão: Light)
+themeLabel.innerText = 'Dark Mode';
 
+themeToggle.addEventListener('click', () => {
+  const currentTheme = html.getAttribute('data-theme');
+  
+  if (currentTheme === 'dark') {
+    html.setAttribute('data-theme', 'light');
+    themeLabel.innerText = 'Dark Mode';
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    themeLabel.innerText = 'Light Mode';
+  }
+});
     /* EMAIL COPY */
     const emailBtn = document.getElementById("emailCopy");
     const toast = document.getElementById("copyToast");
@@ -616,9 +654,10 @@
     };
 
     /* TYPING EFFECT */
-    const text1 = "Tenho evitado os turbilhões de <span class='red-text'>estímulos</span> das redes sociais <span class='red-text'>e suas consequências</span>.";
+    const text1 = "Tenho evitado os turbilhões de <span class='red-text'>estímulos</span> das redes sociais <span class='red-text'>e suas consequências.<br><hr><span class='fade-in-text'>+HUMANO </span></span> -algorítmico.";
     const text2 = "Não irei responder seus reels enviados, use seu tempo para outra coisa, <span class='red-text'>antes que seja tarde.</span>";
-    
+    const text3 = `Leia <span class='red-text'><a href="https://www.anarquista.net/wp-content/uploads/2013/10/A-Sociedade-Industrial-e-seu-futuro-Manifesto-de-Unabomber.pdf" target="_blank">isso aqui</a></span>, pode ser interessante.`;
+
 
     function typeWriter(el, html, speed, callback) {
       let i = 0;
@@ -638,24 +677,40 @@
       type();
     }
 
-    window.onload = () => {
-      setTimeout(() => {
-        typeWriter(document.getElementById("typing"), text1, 25, () => {
-          setTimeout(() => {
-            typeWriter(document.getElementById("typing2"), text2, 25);
-          }, 600);
-        });
-      }, 1500);
-      
+window.onload = () => {
+  // 1. Inicia a cascata de digitação
+  setTimeout(() => {
+    const el1 = document.getElementById("typing");
+    if (el1) {
+      typeWriter(el1, text1, 25, () => {
+        setTimeout(() => {
+          const el2 = document.getElementById("typing2");
+          if (el2) {
+            typeWriter(el2, text2, 25, () => {
+              setTimeout(() => {
+                const el3 = document.getElementById("typing3");
+                if (el3) {
+                  typeWriter(el3, text3, 25);
+                }
+              }, 600);
+            });
+          }
+        }, 600);
+      });
+    }
+  }, 1500);
 
-      const music = document.getElementById("bg-music");
-      music.volume = 0;
-      let vol = 0;
-      const fade = setInterval(() => {
-        if (vol < 0.2) music.volume = (vol += 0.01);
-        else clearInterval(fade);
-      }, 150);
-    };
+  // 2. Fade-in do áudio (Mantenha se quiser o som)
+  const music = document.getElementById("bg-music");
+  if (music) {
+    music.volume = 0;
+    let vol = 0;
+    const fade = setInterval(() => {
+      if (vol < 0.2) music.volume = (vol += 0.01);
+      else clearInterval(fade);
+    }, 150);
+  }
+};
   </script>
 </body>
 
